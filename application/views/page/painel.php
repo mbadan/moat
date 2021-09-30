@@ -28,15 +28,16 @@
                 <div class="card mb-4 box-shadow">
                   <img class="card-img-top" src="/public/images/vinyl.png" alt="Card image cap">
                   <div class="card-body">
-                    <p class="card-text"><?php echo $album->name; ?></p>
+                    <p class="card-text"><?php echo $album->name.' - '.$album->artist; ?></p>
                     <p class="card-text"><?php echo $album->comment; ?></p>
                     <div class="d-flex justify-content-between align-items-center">
                       <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                        <a href="/painel/view/<?php echo $album->id; ?>" class="btn btn-sm btn-outline-secondary">Edit</a>
                         <?php if($this->session->userdata('role') == 1) { ?>
                         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="deleteAlbum(<?php echo $album->id; ?>);">Delete</button>
                         <?php } ?>
                       </div>
+                      <small class="text-muted"><?php echo $album->year; ?></small>
                     </div>
                   </div>
                 </div>
@@ -54,20 +55,28 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="exampleFormControlInput1">Album Name</label>
-              <input type="email" class="form-control" id="album_name" placeholder="Write the Album's name">
+              <input type="text" class="form-control" id="album_name" placeholder="Write the Album's name">
             </div>
             <div class="form-group">
               <label for="exampleFormControlSelect1">Artist</label>
               <select class="form-control" id="artist">
                 <?php foreach ($artists as $key => $artist) { ?>
-                <option value="<?php echo $artist[0]->id; ?>"><?php echo $artist[0]->name; ?></option>
+                <option value="<?php echo $artist[0]->name; ?>"><?php echo $artist[0]->name; ?></option>
                 <?php } ?>
               </select>
             </div>
             <div class="form-group">
-              <label for="exampleFormControlTextarea1">Comments</label>
-              <textarea class="form-control" id="comments" rows="3"></textarea>
+              <label for="exampleFormControlInput1">Album Year</label>
+              <input type="number" step="1" class="form-control" id="album_year" placeholder="Write the Album's year">
             </div>
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Comments</label>
+              <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="AddAlbum();">Add Album</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -120,5 +129,38 @@
         
       }
     })    
+}
+   function AddAlbum() {
+      var name = $('#album_name').val();
+      var comment = $('#comment').val();
+      var year = $('#year').val();
+      var artist = $('#artist option:selected').val();
+
+      var data = {
+          name: name,
+          artist: artist,
+          year: year,
+          comment: comment
+      }
+     $.ajax({
+        url: "/painel/addAlbum",
+        method: "POST",
+        data: data,
+        success: function (data) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Added!'
+            })
+            location.reload();
+        },
+        fail:  function (data) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'The album was not added',
+            confirmButtonColor: '#D32929',
+          })
+        }
+      });
 }
 </script>
