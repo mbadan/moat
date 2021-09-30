@@ -23,57 +23,55 @@
       <div class="album py-5 bg-light">
         <div class="container">
           <div class="row">
-            <div class="col-md-4">
-              <div class="card mb-4 box-shadow">
-                <img class="card-img-top" src="/public/images/vinyl.png" alt="Card image cap">
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+            <?php foreach ($albuns as $key => $album) { ?>
+              <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                  <img class="card-img-top" src="/public/images/vinyl.png" alt="Card image cap">
+                  <div class="card-body">
+                    <p class="card-text"><?php echo $album->name; ?></p>
+                    <p class="card-text"><?php echo $album->comment; ?></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                        <?php if($this->session->userdata('role') == 1) { ?>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="deleteAlbum(<?php echo $album->id; ?>);">Delete</button>
+                        <?php } ?>
+                      </div>
                     </div>
-                    <small class="text-muted">Usuário</small>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card mb-4 box-shadow">
-                <img class="card-img-top" src="/public/images/vinyl.png" alt="Card image cap">
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-muted">Usuário</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card mb-4 box-shadow">
-                <img class="card-img-top" src="/public/images/vinyl.png" alt="Card image cap">
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-muted">Usuário</small>
-                  </div>
-                </div>
-              </div>
-            </div>
+           <?php } ?>
           </div>
         </div>
       </div>
 
     </main>
 
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleFormControlInput1">Album Name</label>
+              <input type="email" class="form-control" id="album_name" placeholder="Write the Album's name">
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Artist</label>
+              <select class="form-control" id="artist">
+                <?php foreach ($artists as $key => $artist) { ?>
+                <option value="<?php echo $artist[0]->id; ?>"><?php echo $artist[0]->name; ?></option>
+                <?php } ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Comments</label>
+              <textarea class="form-control" id="comments" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -82,6 +80,45 @@
     <script src="../../../../public/js/bootstrap.min.js"></script>
   </body>
 <?php $this->load->view('component/js'); ?>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
-  
+  function deleteAlbum(id) {
+    var data = {
+      id: id
+    }
+    Swal.fire({
+      title: 'Are you sure you wanna delete this album?',
+      text: "This action is irreversible",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#D32929',
+      cancelButtonColor: '#1C3FAA',
+      cancelButtonText: 'Cancel',
+      confirmButtonText: 'Delete it'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+            url: "/painel/deletealbum",
+            method: "POST",
+            data: data,
+            success: function (data) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Deleted!'
+                })
+                location.reload();
+            },
+            fail:  function (data) {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error!',
+                  text: 'The album was not deleted',
+                  confirmButtonColor: '#D32929',
+                })
+            }
+        });
+        
+      }
+    })    
+}
 </script>
