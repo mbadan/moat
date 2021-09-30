@@ -97,7 +97,7 @@ switch (ENVIRONMENT)
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
  */
-	$system_path = 'system';
+	$system_path = __DIR__ . DIRECTORY_SEPARATOR . 'system';
 
 /*
  *---------------------------------------------------------------
@@ -114,7 +114,7 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
-	$application_folder = 'application';
+	$application_folder = __DIR__ . DIRECTORY_SEPARATOR . 'application';
 
 /*
  *---------------------------------------------------------------
@@ -196,6 +196,7 @@ switch (ENVIRONMENT)
 		chdir(dirname(__FILE__));
 	}
 
+
 	if (($_temp = realpath($system_path)) !== FALSE)
 	{
 		$system_path = $_temp.DIRECTORY_SEPARATOR;
@@ -211,7 +212,7 @@ switch (ENVIRONMENT)
 	}
 
 	// Is the system path correct?
-	if ( ! is_dir($system_path))
+	if (!is_dir($system_path))
 	{
 		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
 		echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: '.pathinfo(__FILE__, PATHINFO_BASENAME);
@@ -305,6 +306,18 @@ switch (ENVIRONMENT)
 
 	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
 
+
+/**
+ * Loading dependências
+ */
+require_once __DIR__ . '/vendor/autoload.php';
+
+/**
+ * Carregar variável de ambiente
+ */
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
@@ -312,4 +325,4 @@ switch (ENVIRONMENT)
  *
  * And away we go...
  */
-require_once BASEPATH.'core/CodeIgniter.php';
+require_once BASEPATH . 'core/CodeIgniter.php';

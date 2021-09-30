@@ -847,3 +847,30 @@ if ( ! function_exists('function_usable'))
 		return FALSE;
 	}
 }
+
+if (!function_exists("compareBasaUrl"))
+{
+	function compareBasaUrl($origem_url, $base_url)
+	{
+		$origem_url = strtolower($origem_url);
+		$base_url = strtolower($base_url);
+
+		$search_base_url = str_replace([
+			$origem_url,
+			"http", 
+			"https", 
+			":",
+			"/",
+			"\\",
+			"www",
+			"."
+		], "", $base_url);
+
+		if (strlen($search_base_url) > 0)
+		{
+			return $search_base_url;
+		}
+
+		return false;
+	}
+}

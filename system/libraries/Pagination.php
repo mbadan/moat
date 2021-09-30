@@ -296,7 +296,7 @@ class CI_Pagination {
 	 *
 	 * @var	bool
 	 */
-	protected $reuse_query_string = FALSE;
+	protected $reuse_query_string = TRUE;
 
 	/**
 	 * Use global URL suffix flag

@@ -20,6 +20,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 #-------------------------
 /nbproject/
 .idea/*
+.env
 
 ## Sublime Text cache files
 *.tmlanguage.cache
@@ -27,5 +28,5 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
-/tests/tests/
-/tests/results/
+application/config/database.php
+application/config/config.php

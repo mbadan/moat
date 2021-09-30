@@ -1,0 +1,13 @@
+Inicialização:
+
+-> Entrar no Github do Repositório
+-> Baixar o Github Desktop/Git
+-> Criar clone do repositório
+-> Baixar Editor (Sublime text, vs code, etc)
+-> Baixar Arquiteto de BD (Tableplus, mysql workbench, dbeaver, etc)
+-> Baixar e instalar servidor local (de preferência xampp)
+-> ir até o php.ini e liberar o ;extension=gd descomentando
+-> criar virtual host (https://blog.mxcursos.com/criar-virtual-host-com-xampp/)
+-> reiniciar apache
+-> apontar database pra local application/config/database.php
+-> retirar obrigatoriedade do https no local - application/config/config.php
