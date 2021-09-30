@@ -7,7 +7,7 @@ class Painel extends CI_Controller
     {
         parent::__construct();
                 
-
+        $this->load->model('m_functions');
         $this->load->library('session');
     }
     
@@ -41,6 +41,7 @@ class Painel extends CI_Controller
         curl_close($curl);
         $data['artists'] = json_decode($response);
 
+        $data['albuns'] = $this->m_functions->getAlbuns();
         return $this->load->view('page/painel', $data);
     }
 }

@@ -47,6 +47,8 @@ class Login extends CI_Controller
                 "role"      => $login[0]->role
             ];
 
+            $this->session->set_userdata($session);
+            
             return redirect('/painel');
         }
         
